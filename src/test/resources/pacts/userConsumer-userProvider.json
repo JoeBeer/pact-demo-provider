@@ -1,0 +1,129 @@
+{
+  "consumer": {
+    "name": "userConsumer"
+  },
+  "interactions": [
+    {
+      "description": "A request to get user details when user does not exist",
+      "providerStates": [
+        {
+          "name": "User does not exist",
+          "params": {
+            "userId": "999"
+          }
+        }
+      ],
+      "request": {
+        "method": "GET",
+        "path": "/users/999"
+      },
+      "response": {
+        "status": 404
+      }
+    },
+    {
+      "description": "A request to update user details",
+      "providerStates": [
+        {
+          "name": "User exists and can be updated",
+          "params": {
+            "userId": "123"
+          }
+        }
+      ],
+      "request": {
+        "body": {
+          "id": null,
+          "name": "Jane Doe"
+        },
+        "headers": {
+          "Content-Type": "application/json"
+        },
+        "matchingRules": {
+          "body": {
+            "$.name": {
+              "combine": "AND",
+              "matchers": [
+                {
+                  "match": "type"
+                }
+              ]
+            }
+          }
+        },
+        "method": "PUT",
+        "path": "/users/123"
+      },
+      "response": {
+        "status": 204
+      }
+    },
+    {
+      "description": "A request to get user details when user exists",
+      "providerStates": [
+        {
+          "name": "User exists",
+          "params": {
+            "userId": "345"
+          }
+        }
+      ],
+      "request": {
+        "method": "GET",
+        "path": "/users/345"
+      },
+      "response": {
+        "body": {
+          "id": "345",
+          "name": "John Doe"
+        },
+        "headers": {
+          "Content-Type": "application/json; charset=UTF-8"
+        },
+        "matchingRules": {
+          "body": {
+            "$.id": {
+              "combine": "AND",
+              "matchers": [
+                {
+                  "match": "type"
+                }
+              ]
+            },
+            "$.name": {
+              "combine": "AND",
+              "matchers": [
+                {
+                  "match": "type"
+                }
+              ]
+            }
+          },
+          "header": {
+            "Content-Type": {
+              "combine": "AND",
+              "matchers": [
+                {
+                  "match": "regex",
+                  "regex": "application/json(;\\s?charset=[\\w\\-]+)?"
+                }
+              ]
+            }
+          }
+        },
+        "status": 200
+      }
+    }
+  ],
+  "metadata": {
+    "pact-jvm": {
+      "version": "4.5.10"
+    },
+    "pactSpecification": {
+      "version": "3.0.0"
+    }
+  },
+  "provider": {
+    "name": "userProvider"
+  }
+}
