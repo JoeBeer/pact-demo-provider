@@ -1,0 +1,30 @@
+@startuml
+title PACT Contract Testing
+
+actor Consumer
+actor Provider
+
+rectangle "Consumer" {
+    Consumer --> (Request)
+    (Request) --> (PACT File)
+}
+
+rectangle "PACT Broker" {
+    (PACT File) --> (Store PACT)
+}
+
+rectangle "Provider" {
+    (Store PACT) --> (Verify Contract)
+    (Verify Contract) --> Provider
+}
+
+Consumer -> (Request) : send request
+Provider -> (Response) : send response
+Provider -> (Verify Contract) : check contract against PACT
+
+note right of (Verify Contract)
+  - Validates the response
+  - Ensures compatibility
+end note
+
+@enduml
