@@ -3,6 +3,7 @@ package ch.baloise.pactdemo.controller;
 import au.com.dius.pact.provider.junit5.*;
 import au.com.dius.pact.provider.junitsupport.Provider;
 import au.com.dius.pact.provider.junitsupport.State;
+import au.com.dius.pact.provider.junitsupport.loader.PactBroker;
 import au.com.dius.pact.provider.junitsupport.loader.PactFolder;
 import ch.baloise.pactdemo.TestApplicationContextHolder;
 import ch.baloise.pactdemo.model.User;
@@ -16,6 +17,7 @@ import java.util.Map;
 @Provider("userProvider") // Must match the provider name in the Pact file
 @PactFolder("pacts") // Directory where Pact files are stored
 @SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.DEFINED_PORT) // Run on a fixed port
+@PactBroker(host = "localhost", port = "9292")
 class UserControllerPactTest {
 
     @BeforeEach

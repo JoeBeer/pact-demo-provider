@@ -1,0 +1,22 @@
+version: '3.8'
+
+services:
+  pactbroker:
+    image: pactfoundation/pact-broker:latest
+    ports:
+      - "9292:9292"
+    environment:
+      PACT_BROKER_DATABASE_ADAPTER: sqlite
+      PACT_BROKER_DATABASE_URL: sqlite:///var/lib/pactbroker/pactbroker.sqlite
+    volumes:
+      - pactbroker_data:/var/lib/pactbroker
+
+  pact-cli:
+    image: pactfoundation/pact-cli:latest
+    entrypoint: ["tail", "-f", "/dev/null"]  # Hält den Container am Laufen
+    depends_on:
+      - pactbroker
+
+volumes:
+  pactbroker_data:
+    driver: local
