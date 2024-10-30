@@ -12,14 +12,15 @@ import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.TestTemplate;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.test.context.junit.jupiter.SpringExtension;
 
 import java.util.Map;
 
-@Provider("pact-demo-provider") // Must match the provider name in the Pact file
-@SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.DEFINED_PORT) // Run on a fixed port
-@PactBroker(host = "localhost", port = "9292")
+@ExtendWith(SpringExtension.class)
+@SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.DEFINED_PORT)
+@Provider("pact-demo-provider")
+@PactBroker
 class UserControllerPactTest {
-
   @BeforeEach
   void setup(PactVerificationContext context) {
     context.setTarget(new HttpTestTarget("localhost", 8080));
@@ -39,11 +40,12 @@ class UserControllerPactTest {
   public void prepareThatUserNotExists(Map<String, Object> params) {
     String userId = (String) params.get("userId");
     UserController userController = getUserController();
-    if(userId != null) {
+    if (userId != null) {
       userController.getUserStore().remove(userId);
     }
     System.out.println("Set up state: User does not exist with userId = " + userId);
   }
+
   // Helper method to access the UserController's userStore
   private UserController getUserController() {
     return TestApplicationContextHolder.getApplicationContext().getBean(UserController.class);

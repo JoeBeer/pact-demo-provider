@@ -99,6 +99,18 @@
                     </excludes>
                 </configuration>
             </plugin>
+            <plugin>
+                <artifactId>maven-surefire-plugin</artifactId>
+                <version>2.22.2</version>
+                <configuration>
+                    <systemPropertyVariables>
+                        <pact.provider.version>${project.version}</pact.provider.version>
+                        <pact.verifier.publishResults>true</pact.verifier.publishResults>
+                        <pactbroker.host>localhost</pactbroker.host>
+                        <pactbroker.port>9292</pactbroker.port>
+                    </systemPropertyVariables>
+                </configuration>
+            </plugin>
         </plugins>
     </build>
 
