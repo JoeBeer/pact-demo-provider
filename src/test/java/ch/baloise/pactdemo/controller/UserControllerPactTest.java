@@ -23,6 +23,7 @@ class UserControllerPactTest {
   @BeforeEach
   void setup(PactVerificationContext context) {
     context.setTarget(new HttpTestTarget("localhost", 8080));
+    System.setProperty("pact.verifier.publishResults", "true");
   }
 
   @State("User exists")
