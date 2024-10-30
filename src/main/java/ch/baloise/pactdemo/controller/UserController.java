@@ -12,7 +12,12 @@ import java.util.concurrent.ConcurrentHashMap;
 @Getter
 public class UserController {
 
-    // In-memory data store for simplicity
+    public UserController() {
+
+    }
+    public UserController(ConcurrentHashMap<String, User> userStore) {
+        this.userStore = userStore;
+    }
     private ConcurrentHashMap<String, User> userStore = new ConcurrentHashMap<>();
 
     @GetMapping("/{userId}")
@@ -22,6 +27,14 @@ public class UserController {
             return ResponseEntity.ok(user);
         }
         return ResponseEntity.notFound().build();
+    }
+
+    @PostMapping
+    public ResponseEntity<User> createUser(@RequestBody User user) {
+        String userId = String.valueOf(userStore.size() + 1); // Simple ID generation
+        user.setId(userId);
+        userStore.put(userId, user);
+        return ResponseEntity.ok(user);
     }
 
     @PutMapping("/{userId}")
@@ -34,7 +47,11 @@ public class UserController {
         return ResponseEntity.notFound().build();
     }
 
-    public void createUser(String userId, User user) {
-        userStore.put(userId, user);
+    @DeleteMapping("/{userId}")
+    public ResponseEntity<Void> deleteUser(@PathVariable String userId) {
+        if (userStore.remove(userId) != null) {
+            return ResponseEntity.noContent().build();
+        }
+        return ResponseEntity.notFound().build();
     }
 }
