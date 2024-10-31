@@ -13,9 +13,11 @@ services:
 
   pact-cli:
     image: pactfoundation/pact-cli:latest
-    entrypoint: ["tail", "-f", "/dev/null"]  # Hält den Container am Laufen
+    entrypoint: ["tail", "-f", "/dev/null"]
     depends_on:
       - pactbroker
+    environment:
+      PACT_BROKER_BASE_URL: http://pactbroker:9292
 
 volumes:
   pactbroker_data:
